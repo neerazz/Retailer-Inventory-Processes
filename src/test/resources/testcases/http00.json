@@ -1,0 +1,172 @@
+{
+  "request": {
+    "method": "DELETE",
+    "url": "/erase",
+    "headers": {},
+    "body": {}
+  },
+  "response": {
+    "status_code": 200,
+    "headers": {},
+    "body": {}
+  }
+}
+{
+  "request": {
+    "method": "GET",
+    "url": "/model",
+    "headers": {},
+    "body": {}
+  },
+  "response": {
+    "status_code": 200,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "body": []
+  }
+}
+{
+  "request": {
+    "method": "POST",
+    "url": "/model",
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "id": 1,
+      "name": "model-000-000-001"
+    }
+  },
+  "response": {
+    "status_code": 201,
+    "headers": {},
+    "body": {}
+  }
+}
+{
+  "request": {
+    "method": "POST",
+    "url": "/model",
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "id": 1,
+      "name": "model-000-000-001"
+    }
+  },
+  "response": {
+    "status_code": 400,
+    "headers": {},
+    "body": {}
+  }
+}
+{
+  "request": {
+    "method": "POST",
+    "url": "/model",
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "id": 2,
+      "name": "model-000-000-002"
+    }
+  },
+  "response": {
+    "status_code": 201,
+    "headers": {},
+    "body": {}
+  }
+}
+{
+  "request": {
+    "method": "POST",
+    "url": "/model",
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "id": 3,
+      "name": "model-000-000-003"
+    }
+  },
+  "response": {
+    "status_code": 201,
+    "headers": {},
+    "body": {}
+  }
+}
+{
+  "request": {
+    "method": "POST",
+    "url": "/model",
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "id": 4,
+      "name": "model-000-000-004"
+    }
+  },
+  "response": {
+    "status_code": 201,
+    "headers": {},
+    "body": {}
+  }
+}
+{
+  "request": {
+    "method": "POST",
+    "url": "/model",
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "id": 5,
+      "name": "model-000-000-005"
+    }
+  },
+  "response": {
+    "status_code": 201,
+    "headers": {},
+    "body": {}
+  }
+}
+{
+  "request": {
+    "method": "GET",
+    "url": "/model",
+    "headers": {},
+    "body": {}
+  },
+  "response": {
+    "status_code": 200,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "body": [
+      {
+        "id": 1,
+        "name": "model-000-000-001"
+      },
+      {
+        "id": 2,
+        "name": "model-000-000-002"
+      },
+      {
+        "id": 3,
+        "name": "model-000-000-003"
+      },
+      {
+        "id": 4,
+        "name": "model-000-000-004"
+      },
+      {
+        "id": 5,
+        "name": "model-000-000-005"
+      }
+    ]
+  }
+}

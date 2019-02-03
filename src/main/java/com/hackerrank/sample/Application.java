@@ -1,13 +1,13 @@
-package com.hackerrank.sample.retailer;
+package com.hackerrank.sample;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class RetailerApplication {
+public class Application {
 
     public static void main(String[] args) {
-        SpringApplication.run(RetailerApplication.class, args);
+        SpringApplication.run(Application.class, args);
     }
 
 }
