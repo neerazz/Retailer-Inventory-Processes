@@ -1,32 +1,28 @@
 # RetailerAssignment
 
+**Assignment Link:** https://www.hackerrank.com/tests/e5oo39d05s4/login?b=eyJ1c2VybmFtZSI6Im5pcmFqay5zaW5naEB0Y3MuY29tIiwicGFzc3dvcmQiOiI5MjJjMGQ5NCIsImhpZGUiOnRydWV9
 
 Frosters is a Retailer who is planning to extend their presence online and automate some of the existing inventory processes. 
 
-Step 1: Build following Services. Use in-memory H2 database.
+**_`Step 1:`_** Build following Services. Use in-memory H2 database.
 
-1. Customer Service
+1. **Customer Service**
 
-2. Vendor Service
+2. **Vendor Service**
 
-3. Inventory Management Service
+3. **Inventory Management Service**
 
- 
+**_`Step 2:`_** Write Junit test cases for the application and use Jacaco for checking code coverage. Test and ensure atleast 90% Code Coverage and all test cases pass.
 
-Step 2: Write Junit test cases for the application and use Jacaco for checking code coverage. Test and ensure atleast 90% Code Coverage and all test cases pass.
-
- 
-
-Step 3: Configure Flyway DB Migration and your script files to create tables and populate data. Override spring default configuration "ddl-auto : none" to avoid auto creation of tables. 
+**_`Step 3:`_** Configure Flyway DB Migration and your script files to create tables and populate data. Override spring default configuration "ddl-auto : none" to avoid auto creation of tables. 
 
  
 
-More Specific Details on the Services
+**More Specific Details on the Services**
 
-Customer Service
+_Customer Service_
 
 Customer JSON Data:
-
 
 customerId (Long)
 
@@ -38,9 +34,6 @@ address (String)
 
 gender (String)
 
- 
-
- 
 
 1. Get All Customers
 
