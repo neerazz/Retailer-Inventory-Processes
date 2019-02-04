@@ -1,11 +1,13 @@
 package com.hackerrank.sample;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.hackerrank.sample.service.CustomerService;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
@@ -17,6 +19,9 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.util.NestedServletException;
 
+import static java.util.Collections.singletonList;
+import static org.mockito.BDDMockito.given;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -24,6 +29,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
+
 import javax.servlet.ServletContext;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -48,6 +54,9 @@ import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import java.util.Collections;
+import java.util.List;
+
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class CustomerUnitTest {
@@ -59,6 +68,12 @@ public class CustomerUnitTest {
 
     @Autowired
     private ObjectMapper objectMapper;
+
+    @MockBean
+    private CustomerController customerController;
+
+    @MockBean
+    private CustomerService customerService;
 
     @Before
     public void setUp() {
@@ -75,7 +90,22 @@ public class CustomerUnitTest {
     }
 
     @Test
-    public void addCustomerTest() throws Exception {
+    public void getCustomerTest() throws Exception {
+
+        RequestBuilder requestBuilder = MockMvcRequestBuilders
+                .get("/customer/")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON);
+
+        mockMVC.perform(requestBuilder).andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").isEmpty())
+                .andReturn();
+
+    }
+
+    @Test
+    public void add_update_delete_Customer_Test() throws Exception {
 
         Customer customer = new Customer();
         customer.setAddress("Test Address");
@@ -84,63 +114,56 @@ public class CustomerUnitTest {
         customer.setGender("M");
         customer.setCustomerName("Test Customer");
 
-        RequestBuilder requestBuilder = MockMvcRequestBuilders.post("/customer")
+    //        Creating a API Request for adding a customer.
+        RequestBuilder postBuilder = MockMvcRequestBuilders
+                .post("/customer/")
                 .accept(MediaType.APPLICATION_JSON)
                 .content(toJson(customer))
                 .contentType(MediaType.APPLICATION_JSON);
-        MvcResult result = mockMVC.perform(requestBuilder).andReturn();
 
-        System.out.println(result.getResponse().getContentAsString());
-
-        System.out.println(
-        mockMVC.perform(get("/customer/")
-                .accept(MediaType.APPLICATION_JSON))
-//                .andExpect(status().isOk())
-                .andReturn()
-                .getResponse().getContentAsString()
-        );
-
-        result = mockMVC.perform(post("/customer")
-                .content(toJson(customer))
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON))
-//                .andExpect(status().isCreated())
+    //        Add a customer.
+        MvcResult result = mockMVC.perform(postBuilder)
+                .andDo(print())
+                .andExpect(status().isCreated())
+//                .andExpect(jsonPath("$").isNotEmpty())
 //                .andExpect(jsonPath("$.customerId").isNumber())
+//                .andExpect(jsonPath("$.customerName").value(customer.getCustomerName()))
                 .andReturn();
 
-        System.out.println(
-                mockMVC.perform(get("/customer/")
-                        .accept(MediaType.APPLICATION_JSON))
-//                .andExpect(status().isOk())
-                        .andReturn()
-                        .getResponse().getContentAsString()
-        );
+    //        Creating a API Request for updating the customer name.
+        String newCustName = "New Test Name";
+        customer.setAddress(newCustName);
+        RequestBuilder putBuilder = MockMvcRequestBuilders
+                .put("/customer/" + customer.getCustomerId())
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(toJson(customer));
 
-        JSONObject json = new JSONObject(result.getResponse().getContentAsString());
-
-        mockMVC.perform(MockMvcRequestBuilders.get("/customer/"+json.get("resourceId")).accept(MediaType.APPLICATION_JSON)).andExpect(status().isOk())
+    //      Update the Customer.
+        mockMVC.perform(putBuilder)
+                .andDo(print())
+                .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isNotEmpty())
-                .andExpect(jsonPath("$.customerId").value(json.get("customerId")));
+                .andExpect(jsonPath("$.customerId").isNumber())
+                .andExpect(jsonPath("$.customerName").value(newCustName))
+                .andReturn();
 
-//        mockMVC.perform(
-//                post("/customer/")
-//                .content(toJson(customer))
-//                .contentType(MediaType.APPLICATION_JSON)
-//        )
-//                .andExpect(status().isCreated());
-//
-//        mockMVC.perform(
-//                get("/customer/" + customer.getCustomerId())
-//                        .accept(MediaType.APPLICATION_JSON)
-//        )
-//                .andExpect(status().isOk())
-//                .andExpect(content().string(jsonCustomer))
-//                .andExpect(jsonPath("$.customerName").value(customer.getCustomerName()))
-//                .andExpect(jsonPath("$.address").value(customer.getAddress()));
+    //        Creating a API Request for deleting the customer .
+        RequestBuilder deleteBuilder = MockMvcRequestBuilders
+                .delete("/customer/"+ customer.getCustomerId())
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(toJson(customer));
+
+    //      Delete the Customer.
+        mockMVC.perform(deleteBuilder)
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").isEmpty())
+                .andReturn();
     }
 
     private byte[] toJson(Object r) throws Exception {
-        ObjectMapper map = new ObjectMapper();
-        return map.writeValueAsString(r).getBytes();
+        return objectMapper.writeValueAsString(r).getBytes();
     }
 }
