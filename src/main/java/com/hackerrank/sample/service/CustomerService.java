@@ -31,7 +31,7 @@ public class CustomerService {
     }
 
     public Customer addCustomer(Customer customer) {
-        System.out.println("Reached add customer.");
+
         try{
             if (getCustomer(customer.getCustomerId()) == null){
                 System.out.println("Adding new customer:" + customer);
