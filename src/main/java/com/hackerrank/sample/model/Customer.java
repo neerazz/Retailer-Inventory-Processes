@@ -7,7 +7,7 @@ import javax.persistence.Id;
 public class Customer {
 
     @Id
-    private Long customerId;
+    private Integer customerId;
     private String customerName;
     private Long contactNumber;
     private String address;
@@ -16,11 +16,11 @@ public class Customer {
     public Customer() {
     }
 
-    public Long getCustomerId() {
+    public Integer getCustomerId() {
         return customerId;
     }
 
-    public void setCustomerId(Long customerId) {
+    public void setCustomerId(Integer customerId) {
         this.customerId = customerId;
     }
 

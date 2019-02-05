@@ -20,7 +20,7 @@ public class CustomerService {
         return customerRepository.findAll();
     }
 
-    public Customer getCustomer(Long custId) {
+    public Customer getCustomer(Integer custId) {
         System.out.println("Reached get customer.");
         Optional<Customer> result = customerRepository.findById(custId);
         return result.isPresent() ? result.get() : null;
@@ -31,7 +31,7 @@ public class CustomerService {
     }
 
     public Customer addCustomer(Customer customer) {
-
+        System.out.println("Reached addCustomer with:" + customer);
         try{
             if (getCustomer(customer.getCustomerId()) == null){
                 System.out.println("Adding new customer:" + customer);
@@ -45,7 +45,7 @@ public class CustomerService {
         }
     }
 
-    public Customer updateCustomer(Long custId, Customer customer) {
+    public Customer updateCustomer(Integer custId, Customer customer) {
 
         try{
             System.out.println("Reached updateCustomer");
@@ -59,7 +59,7 @@ public class CustomerService {
         }
     }
 
-    public void deleteCustomer(Long custID) {
+    public void deleteCustomer(Integer custID) {
         customerRepository.deleteById(custID);
     }
 

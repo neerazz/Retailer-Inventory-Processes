@@ -36,7 +36,7 @@ public class InventoryController {
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public Inventory addInventory(@PathVariable("id") Long itemId, @RequestBody @Valid Inventory inventory){
+    public Inventory updateInventory(@PathVariable("id") Long itemId, @RequestBody @Valid Inventory inventory){
         return inventoryService.updateInventory(itemId,inventory);
     }
 

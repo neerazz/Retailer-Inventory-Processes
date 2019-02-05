@@ -1,8 +1,8 @@
 package com.hackerrank.sample;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.hackerrank.sample.controller.CustomerController;
-import com.hackerrank.sample.model.Customer;
+import com.hackerrank.sample.controller.VendorConroller;
+import com.hackerrank.sample.model.Vendor;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -28,7 +28,7 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppC
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class CustomerUnitTest {
+public class VendorUnitTest {
 
     private MockMvc mockMVC;
 
@@ -39,7 +39,7 @@ public class CustomerUnitTest {
     private ObjectMapper objectMapper;
 
     @MockBean
-    private CustomerController customerController;
+    private VendorConroller vendorController;
 
     @Before
     public void setUp() {
@@ -47,19 +47,10 @@ public class CustomerUnitTest {
     }
 
     @Test
-    public void check_controller_present_in_webApplicationContext() {
-        ServletContext servletContext = webApplicationContext.getServletContext();
-        Assert.assertNotNull(servletContext);
-        Assert.assertTrue(servletContext instanceof MockServletContext);
-        Assert.assertNotNull(webApplicationContext.getBean("customerController"));
-        Assert.assertNotNull(webApplicationContext.getBean("customerService"));
-    }
-
-    @Test
-    public void getCustomerTest() throws Exception {
+    public void getvendorTest() throws Exception {
 
         mockMVC.perform(
-                get("/customer/")
+                get("/vendor/")
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
@@ -70,53 +61,53 @@ public class CustomerUnitTest {
     }
 
     @Test
-    public void addCustomer_Test() throws Exception {
+    public void addvendor_Test() throws Exception {
 
-        when(customerController.addCustomer(any())).thenReturn(getCorrectCustomer());
-        //      Add the Customer.
+        when(vendorController.addVendor(any())).thenReturn(getCorrectvendor());
+        //      Add the vendor.
         mockMVC.perform(
-                put("/customer/"+ getCorrectCustomer().getCustomerId())
+                put("/vendor/"+ getCorrectvendor().getVendorId())
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(toJson(getCorrectCustomer())))
+                        .content(toJson(getCorrectvendor())))
                 .andDo(print())
                 .andExpect(status().isOk())
 //                .andExpect(jsonPath("$").isNotEmpty())
-//                .andExpect(jsonPath("$.customerId").isNumber())
-//                .andExpect(jsonPath("$.customerName").value(getCorrectCustomer().getCustomerName()))
+//                .andExpect(jsonPath("$.vendorId").isNumber())
+//                .andExpect(jsonPath("$.vendorName").value(getCorrectvendor().getvendorName()))
                 .andReturn();
     }
 
     @Test
-    public void updateCustomer_Test() throws Exception {
+    public void updatevendor_Test() throws Exception {
 
-    //        Creating a customer name.
+    //        Creating a vendor name.
         String newCustName = "New Test Name";
-        Customer updatedCustomer = getCorrectCustomer();
-        updatedCustomer.setCustomerName(newCustName);
+        Vendor updatedvendor = getCorrectvendor();
+        updatedvendor.setVendorName(newCustName);
 
-        when(customerController.updateCustomer(any(), any())).thenReturn(updatedCustomer);
+        when(vendorController.addVendor(any(), any())).thenReturn(updatedvendor);
 
-    //      Update the Customer.
+    //      Update the vendor.
         mockMVC.perform(
-                put("/customer/"+ updatedCustomer.getCustomerId())
+                put("/vendor/"+ updatedvendor.getVendorId())
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(toJson(updatedCustomer)))
+                        .content(toJson(updatedvendor)))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isNotEmpty())
-                .andExpect(jsonPath("$.customerId").isNumber())
-                .andExpect(jsonPath("$.customerName").value(newCustName))
+                .andExpect(jsonPath("$.vendorId").isNumber())
+                .andExpect(jsonPath("$.vendorName").value(newCustName))
                 .andReturn();
     }
 
     @Test
-    public void deleteCustomer_Test_negative_case() throws Exception {
+    public void deletevendor_Test_negative_case() throws Exception {
 
-        //      Delete the Customer.
+        //      Delete the vendor.
         mockMVC.perform(
-                delete("/customer/"+ getCorrectCustomer().getCustomerId())
+                delete("/vendor/"+ getCorrectvendor().getVendorId())
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
@@ -125,14 +116,14 @@ public class CustomerUnitTest {
     }
 
     @Test
-    public void deleteAllCustomer_Test() throws Exception {
+    public void deleteAllvendor_Test() throws Exception {
 
-        //      Delete the Customer.
+        //      Delete the vendor.
         mockMVC.perform(
-                delete("/customer/")
+                delete("/vendor/")
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(toJson(getCorrectCustomer())))
+                .content(toJson(getCorrectvendor())))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andReturn();
@@ -143,12 +134,12 @@ public class CustomerUnitTest {
         return outputJSON;
     }
 
-    private Customer getCorrectCustomer(){
-        Customer randomCustomer = new Customer();
-        randomCustomer.setCustomerName("Random Name");
-        randomCustomer.setCustomerId(12345);
-        randomCustomer.setGender("M");
-        randomCustomer.setContactNumber(Long.parseLong("1234567890"));
-        return randomCustomer;
+    private Vendor getCorrectvendor(){
+        Vendor randomvendor = new Vendor();
+        randomvendor.setVendorName("Random Name");
+        randomvendor.setVendorId(Long.parseLong("12345"));
+        randomvendor.setVendorEmail("EMAIL");
+        randomvendor.setVendorContactNo("1234567890");
+        return randomvendor;
     }
 }

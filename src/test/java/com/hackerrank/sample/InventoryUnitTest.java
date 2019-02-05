@@ -1,8 +1,8 @@
 package com.hackerrank.sample;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.hackerrank.sample.controller.CustomerController;
-import com.hackerrank.sample.model.Customer;
+import com.hackerrank.sample.controller.InventoryController;
+import com.hackerrank.sample.model.Inventory;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -28,7 +28,7 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppC
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class CustomerUnitTest {
+public class InventoryUnitTest {
 
     private MockMvc mockMVC;
 
@@ -39,7 +39,7 @@ public class CustomerUnitTest {
     private ObjectMapper objectMapper;
 
     @MockBean
-    private CustomerController customerController;
+    private InventoryController inventoryController;
 
     @Before
     public void setUp() {
@@ -51,15 +51,14 @@ public class CustomerUnitTest {
         ServletContext servletContext = webApplicationContext.getServletContext();
         Assert.assertNotNull(servletContext);
         Assert.assertTrue(servletContext instanceof MockServletContext);
-        Assert.assertNotNull(webApplicationContext.getBean("customerController"));
-        Assert.assertNotNull(webApplicationContext.getBean("customerService"));
+        Assert.assertNotNull(webApplicationContext.getBean("inventoryController"));
     }
 
     @Test
-    public void getCustomerTest() throws Exception {
+    public void getInventoryTest() throws Exception {
 
         mockMVC.perform(
-                get("/customer/")
+                get("/item/")
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
@@ -70,53 +69,47 @@ public class CustomerUnitTest {
     }
 
     @Test
-    public void addCustomer_Test() throws Exception {
+    public void addInventory_Test() throws Exception {
 
-        when(customerController.addCustomer(any())).thenReturn(getCorrectCustomer());
-        //      Add the Customer.
+        when(inventoryController.addInventory(any())).thenReturn(getCorrectInventory());
+        //      Add the Inventory.
         mockMVC.perform(
-                put("/customer/"+ getCorrectCustomer().getCustomerId())
+                post("/item/")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(toJson(getCorrectInventory())))
+                .andDo(print())
+                .andExpect(status().isCreated())
+//                .andExpect(jsonPath("$").isNotEmpty())
+//                .andExpect(jsonPath("$.InventoryId").isNumber())
+//                .andExpect(jsonPath("$.InventoryName").value(getCorrectInventory().getInventoryName()))
+                .andReturn();
+    }
+
+    @Test
+    public void updateInventory_Test() throws Exception {
+
+        when(inventoryController.addInventory(any())).thenReturn(getCorrectInventory());
+        //      Add the Inventory.
+        mockMVC.perform(
+                put("/item/"+ getCorrectInventory().getSkuId())
                         .accept(MediaType.APPLICATION_JSON)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(toJson(getCorrectCustomer())))
+                        .content(toJson(getCorrectInventory())))
                 .andDo(print())
                 .andExpect(status().isOk())
 //                .andExpect(jsonPath("$").isNotEmpty())
-//                .andExpect(jsonPath("$.customerId").isNumber())
-//                .andExpect(jsonPath("$.customerName").value(getCorrectCustomer().getCustomerName()))
+//                .andExpect(jsonPath("$.InventoryId").isNumber())
+//                .andExpect(jsonPath("$.InventoryName").value(getCorrectInventory().getInventoryName()))
                 .andReturn();
     }
 
     @Test
-    public void updateCustomer_Test() throws Exception {
+    public void deleteInventory_Test_negative_case() throws Exception {
 
-    //        Creating a customer name.
-        String newCustName = "New Test Name";
-        Customer updatedCustomer = getCorrectCustomer();
-        updatedCustomer.setCustomerName(newCustName);
-
-        when(customerController.updateCustomer(any(), any())).thenReturn(updatedCustomer);
-
-    //      Update the Customer.
+        //      Delete the Inventory.
         mockMVC.perform(
-                put("/customer/"+ updatedCustomer.getCustomerId())
-                        .accept(MediaType.APPLICATION_JSON)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(toJson(updatedCustomer)))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$").isNotEmpty())
-                .andExpect(jsonPath("$.customerId").isNumber())
-                .andExpect(jsonPath("$.customerName").value(newCustName))
-                .andReturn();
-    }
-
-    @Test
-    public void deleteCustomer_Test_negative_case() throws Exception {
-
-        //      Delete the Customer.
-        mockMVC.perform(
-                delete("/customer/"+ getCorrectCustomer().getCustomerId())
+                delete("/item/"+ getCorrectInventory().getSkuId())
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
@@ -125,14 +118,14 @@ public class CustomerUnitTest {
     }
 
     @Test
-    public void deleteAllCustomer_Test() throws Exception {
+    public void deleteAllInventory_Test() throws Exception {
 
-        //      Delete the Customer.
+        //      Delete the Inventory.
         mockMVC.perform(
-                delete("/customer/")
+                delete("/item/")
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(toJson(getCorrectCustomer())))
+                .content(toJson(getCorrectInventory())))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andReturn();
@@ -143,12 +136,11 @@ public class CustomerUnitTest {
         return outputJSON;
     }
 
-    private Customer getCorrectCustomer(){
-        Customer randomCustomer = new Customer();
-        randomCustomer.setCustomerName("Random Name");
-        randomCustomer.setCustomerId(12345);
-        randomCustomer.setGender("M");
-        randomCustomer.setContactNumber(Long.parseLong("1234567890"));
-        return randomCustomer;
+    private Inventory getCorrectInventory(){
+        Inventory randomInventory = new Inventory();
+        randomInventory.setSkuId(Long.parseLong("1234"));
+        randomInventory.setInventoryOnHand(10);
+        randomInventory.setPrice(Double.parseDouble("12345678.90"));
+        return randomInventory;
     }
 }
