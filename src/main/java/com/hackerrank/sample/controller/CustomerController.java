@@ -33,7 +33,7 @@ public class CustomerController {
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public Customer getCustomer(@PathVariable("id") Long custId){
+    public Customer getCustomer(@PathVariable("id") Integer custId){
         return customerService.getCustomer(custId);
     }
 
@@ -45,15 +45,16 @@ public class CustomerController {
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public Customer updateCustomer(@PathParam("id") Long custId, @RequestBody @Valid Customer customer){
+    public @ResponseBody Customer updateCustomer(@PathVariable("id") Integer custId, @RequestBody @Valid Customer customer){
         return customerService.updateCustomer(custId, customer);
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public void deleteCustomer(@PathVariable("id") Long custID){
+    public void deleteCustomer(@PathVariable("id") Integer custID){
         customerService.deleteCustomer(custID);
     }
+
     @DeleteMapping("/")
     @ResponseStatus(HttpStatus.OK)
     public void deleteCustomers(){

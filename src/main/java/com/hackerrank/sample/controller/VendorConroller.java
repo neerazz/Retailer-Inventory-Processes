@@ -12,7 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/vendor")
-public class VendorController {
+public class VendorConroller {
     @Autowired
     private VendorService vendorService;
 
@@ -42,12 +42,12 @@ public class VendorController {
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public void deleteItem(@PathVariable("id") Long itemId){
+    public void deleteVendor(@PathVariable("id") Long itemId){
         vendorService.deleteItem(itemId);
     }
     @DeleteMapping("/")
     @ResponseStatus(HttpStatus.OK)
-    public void deleteItems(){
+    public void deleteVendor(){
         vendorService.deleteItems();
     }
 }
